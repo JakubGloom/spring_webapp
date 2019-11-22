@@ -1,0 +1,6 @@
+--delete from user_permission;
+--delete from spring_blog.user;
+--delete from permission;
+--insert into permission values (1,"ROLE_USER"),(2,"ROLE_ADMIN");
+--insert into spring_blog.user values (1,"test1@test.pl",1,"test12", sysdate()),(2,"test1@test.pl",1,"test22",sysdate()),(3,"test1@test.pl",1,"test32", sysdate());
+--insert into user_permission values (1,1),(2,1),(3,1),(3,2);

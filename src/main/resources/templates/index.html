@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th=”http://www.thymeleaf.org”>
+
+
+<nav th:replace="fragments/head  :: head"></nav>
+
+<body>
+
+<!-- Navigation -->
+<nav th:replace="fragments/navbar :: navbar"></nav>
+
+<!-- Page Header -->
+
+<header th:replace="fragments/header :: header(title='BLOG TEMPLATE',subtitle='Atos Blog')"></header>
+<!-- Main Content -->
+<div class="container">
+  <div  class="row">
+    <div th:each="post : ${posts}" class="col-lg-8 col-md-10 mx-auto">
+      <div class="post-preview">
+        <a th:href="@{'/post&' + ${post.getPostId()}}">
+          <h2 th:text="${post.getTitle()}" class="post-title">
+            title
+          </h2>
+        </a>
+        <p th:text="${'Author: '+post.getAuthor().getEmail() + ' (date: ' + post.getAddedDate() + ' )'}" class="post-meta">
+          author & date
+        </p>
+      </div>
+      <div class="clearfix"
+           th:if="${!isAuth.equals('not logged') && (isAdmin || post.getAuthor().getEmail().equals(isAuth))}">
+        <form th:action="@{/post/delete}" th:method="delete" >
+          <input type="hidden" th:name="post_id" th:value="${post.getPostId()}">
+          <input type="submit" value="delete" class="btn btn-primary float-right mr-2 ml-2">
+        </form>
+
+        <a th:href="@{'/post/edit/' + ${post.getPostId()}}" class="btn btn-primary float-right">
+          edit
+        </a>
+      </div>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<div th:if="${!isAuth.equals('not logged')}" class="container">
+  <div  class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      <form th:action="@{/addpost}" th:method="post" th:object="${newpost}">
+        <div class="form-group">
+          <input class="form-control" th:type="text" th:field="*{title}" placeholder="input title">
+          <p th:errors="*{title}"></p>
+          <textarea class="form-control-plaintext" th:type="text" th:field="*{content}" placeholder="input content"></textarea>
+          <p th:errors="*{content}"></p>
+          <select class="form-control" th:field="*{category}">
+            <option th:each="c : ${categories}" th:text="${c}" th:value="${c}"></option>
+          </select>
+          <input class="btn btn-primary mt-2 float-center" th:type="submit" th:value="add">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+
+<nav th:replace="fragments/footer :: footer"></nav>
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
